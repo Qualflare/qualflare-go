@@ -53,10 +53,10 @@ func TestPublicPackage_ImportsOnlyItsThreeInternalPackages(t *testing.T) {
 	// Keeping this narrow is what stops a wire-contract change from rebuilding
 	// every user's test binary.
 	allowed := map[string]bool{
-		"github.com/Qualflare/qualflare-go":                     true,
-		"github.com/Qualflare/qualflare-go/internal/sentinel":   true,
-		"github.com/Qualflare/qualflare-go/internal/constants":  true,
-		"github.com/Qualflare/qualflare-go/internal/textutil":   true,
+		"github.com/Qualflare/qualflare-go":                    true,
+		"github.com/Qualflare/qualflare-go/internal/sentinel":  true,
+		"github.com/Qualflare/qualflare-go/internal/constants": true,
+		"github.com/Qualflare/qualflare-go/internal/textutil":  true,
 	}
 	for _, dep := range deps(t, ".") {
 		if !strings.HasPrefix(dep, "github.com/Qualflare/qualflare-go") {
