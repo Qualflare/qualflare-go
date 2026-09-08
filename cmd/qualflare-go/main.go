@@ -36,10 +36,16 @@ func (f *inputFiles) String() string     { return strings.Join(*f, ",") }
 func (f *inputFiles) Set(v string) error { *f = append(*f, v); return nil }
 
 func main() {
-	os.Exit(run(os.Args[1:], os.Stdin, os.Stderr))
+	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
 }
 
-func run(argv []string, stdin io.Reader, errOut io.Writer) int {
+// run is the whole binary minus os.Exit.
+//
+// stdout carries requested output -- currently just -version -- and errOut
+// carries diagnostics. Keeping them apart matters: a release workflow, or any
+// script, reads the version from stdout, and printing it to stderr makes it
+// invisible to `$(qualflare-go -version)`.
+func run(argv []string, stdin io.Reader, stdout, errOut io.Writer) int {
 	fs := flag.NewFlagSet("qualflare-go", flag.ContinueOnError)
 	fs.SetOutput(errOut)
 
@@ -66,7 +72,7 @@ func run(argv []string, stdin io.Reader, errOut io.Writer) int {
 		return 2
 	}
 	if *showVersion {
-		fmt.Fprintln(errOut, "qualflare-go "+version.Full())
+		fmt.Fprintln(stdout, "qualflare-go "+version.Full())
 		return 0
 	}
 
