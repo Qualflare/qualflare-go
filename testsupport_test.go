@@ -13,6 +13,6 @@ type stepTB struct {
 	failed bool
 }
 
-func (s stepTB) Failed() bool     { return s.failed }
-func (s stepTB) Log(args ...any)  { s.f.Log(args...) }
-func (s stepTB) Helper()          { s.f.Helper() }
+func (s stepTB) Failed() bool    { return s.failed }
+func (s stepTB) Log(args ...any) { s.f.Log(args...) }
+func (s stepTB) Helper()         { s.f.Helper() }
