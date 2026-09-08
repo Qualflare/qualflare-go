@@ -1,0 +1,38 @@
+{"Time":"2026-09-08T14:12:50.266104+03:00","Action":"start","Package":"awkward/pkg_timeout"}
+{"Time":"2026-09-08T14:12:50.621413+03:00","Action":"run","Package":"awkward/pkg_timeout","Test":"TestHangsForever"}
+{"Time":"2026-09-08T14:12:50.621711+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"=== RUN   TestHangsForever\n"}
+{"Time":"2026-09-08T14:12:52.623796+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"panic: test timed out after 2s\n"}
+{"Time":"2026-09-08T14:12:52.623978+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\trunning tests:\n"}
+{"Time":"2026-09-08T14:12:52.624013+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t\tTestHangsForever (2s)\n"}
+{"Time":"2026-09-08T14:12:52.624028+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\n"}
+{"Time":"2026-09-08T14:12:52.624038+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"goroutine 33 [running]:\n"}
+{"Time":"2026-09-08T14:12:52.624048+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.(*M).startAlarm.func1()\n"}
+{"Time":"2026-09-08T14:12:52.624058+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2802 +0x2cc\n"}
+{"Time":"2026-09-08T14:12:52.624142+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"created by time.goFunc\n"}
+{"Time":"2026-09-08T14:12:52.624158+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/time/sleep.go:215 +0x38\n"}
+{"Time":"2026-09-08T14:12:52.624168+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\n"}
+{"Time":"2026-09-08T14:12:52.624177+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"goroutine 1 [chan receive]:\n"}
+{"Time":"2026-09-08T14:12:52.624236+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.(*T).Run(0x9219d370008, {0x102b88ee8?, 0x25057a6002b429e0?}, 0x102cdbef8)\n"}
+{"Time":"2026-09-08T14:12:52.624255+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2109 +0x3bc\n"}
+{"Time":"2026-09-08T14:12:52.624267+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.runTests.func1(0x9219d370008)\n"}
+{"Time":"2026-09-08T14:12:52.624277+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2585 +0x40\n"}
+{"Time":"2026-09-08T14:12:52.624287+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.tRunner(0x9219d370008, 0x9219d320c48)\n"}
+{"Time":"2026-09-08T14:12:52.624303+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2036 +0xc4\n"}
+{"Time":"2026-09-08T14:12:52.624313+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.runTests({0x102b86a56, 0x7}, {0x102b89d56, 0x13}, 0x9219d3262e8, {0x102cfd310, 0x1, 0x1}, {0x8080808045666743?, 0x102b88b0a?, ...})\n"}
+{"Time":"2026-09-08T14:12:52.624335+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2583 +0x3f0\n"}
+{"Time":"2026-09-08T14:12:52.624345+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.(*M).Run(0x9219d324a00)\n"}
+{"Time":"2026-09-08T14:12:52.624354+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2443 +0x578\n"}
+{"Time":"2026-09-08T14:12:52.624417+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"main.main()\n"}
+{"Time":"2026-09-08T14:12:52.624425+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t_testmain.go:46 +0x80\n"}
+{"Time":"2026-09-08T14:12:52.624433+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\n"}
+{"Time":"2026-09-08T14:12:52.624439+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"goroutine 18 [sleep]:\n"}
+{"Time":"2026-09-08T14:12:52.624446+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"time.Sleep(0x8bb2c97000)\n"}
+{"Time":"2026-09-08T14:12:52.624454+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/runtime/time.go:363 +0x150\n"}
+{"Time":"2026-09-08T14:12:52.62446+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"awkward/pkg_timeout.TestHangsForever(0x9219d370248?)\n"}
+{"Time":"2026-09-08T14:12:52.624467+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/Users/ibrahim/Astrais/frameworks/qualflare-go/test/integration/fixtures/awkward/pkg_timeout/d_test.go:8 +0x28\n"}
+{"Time":"2026-09-08T14:12:52.624474+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"testing.tRunner(0x9219d370248, 0x102cdbef8)\n"}
+{"Time":"2026-09-08T14:12:52.624498+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2036 +0xc4\n"}
+{"Time":"2026-09-08T14:12:52.624506+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"created by testing.(*T).Run in goroutine 1\n"}
+{"Time":"2026-09-08T14:12:52.624512+03:00","Action":"output","Package":"awkward/pkg_timeout","Test":"TestHangsForever","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2101 +0x3a8\n"}
+{"Time":"2026-09-08T14:12:52.625443+03:00","Action":"output","Package":"awkward/pkg_timeout","Output":"FAIL\tawkward/pkg_timeout\t2.359s\n"}
+{"Time":"2026-09-08T14:12:52.625478+03:00","Action":"fail","Package":"awkward/pkg_timeout","Elapsed":2.359}

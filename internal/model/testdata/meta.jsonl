@@ -1,0 +1,37 @@
+{"Time":"2026-09-08T14:28:05.560212+03:00","Action":"start","Package":"awkward/pkg_meta"}
+{"Time":"2026-09-08T14:28:05.896496+03:00","Action":"run","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata"}
+{"Time":"2026-09-08T14:28:05.896566+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"=== RUN   TestRecordsEveryKindOfMetadata\n"}
+{"Time":"2026-09-08T14:28:05.896675+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoibGFiZWwiLCJuIjoidGVhbSIsInYiOiJwbGF0Zm9ybSJ9@@73503cd6@@\n"}
+{"Time":"2026-09-08T14:28:05.896694+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoidGFnIiwidGciOlsic21va2UiLCJjaGVja291dCJdfQ@@43930879@@\n"}
+{"Time":"2026-09-08T14:28:05.896699+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoibGluayIsIm4iOiJRRi00MiIsInUiOiJodHRwczovL2V4YW1wbGUuY29tL2lzc3VlLzQyIiwidHkiOiJpc3N1ZSJ9@@c32abc85@@\n"}
+{"Time":"2026-09-08T14:28:05.896707+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoicHJpbyIsInYiOiJoaWdoIn0@@a6019f04@@\n"}
+{"Time":"2026-09-08T14:28:05.896715+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoiZGVzYyIsInR4IjoiY292ZXJzIHRoZSB3aG9sZSBtZXRhZGF0YSBzdXJmYWNlIn0@@fdbfa2db@@\n"}
+{"Time":"2026-09-08T14:28:05.896719+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoicGFyYW0iLCJuIjoicGxhbiIsInYiOiJwcm8ifQ@@cc02e7bc@@\n"}
+{"Time":"2026-09-08T14:28:05.896725+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoicGFyYW0iLCJuIjoidG9rZW4iLCJtIjp0cnVlfQ@@1d3160e1@@\n"}
+{"Time":"2026-09-08T14:28:05.896729+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    step.go:51: @@QF1@@eyJrIjoic3RlcCsiLCJuIjoib3V0ZXIifQ@@9c133216@@\n"}
+{"Time":"2026-09-08T14:28:05.896733+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    emit.go:30: @@QF1@@eyJrIjoicGFyYW0iLCJuIjoic2t1IiwidiI6IndpZGdldCJ9@@a34c88ec@@\n"}
+{"Time":"2026-09-08T14:28:05.896736+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    step.go:51: @@QF1@@eyJrIjoic3RlcCsiLCJuIjoiaW5uZXIifQ@@5a0fd3a9@@\n"}
+{"Time":"2026-09-08T14:28:05.89674+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    step.go:84: @@QF1@@eyJrIjoic3RlcC0iLCJzdCI6InBhc3NlZCIsImQiOjMzMzR9@@846d3f7e@@\n"}
+{"Time":"2026-09-08T14:28:05.896743+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"    step.go:84: @@QF1@@eyJrIjoic3RlcC0iLCJzdCI6InBhc3NlZCIsImQiOjEzNjY2fQ@@21b25779@@\n"}
+{"Time":"2026-09-08T14:28:05.896749+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Output":"--- PASS: TestRecordsEveryKindOfMetadata (0.00s)\n"}
+{"Time":"2026-09-08T14:28:05.896755+03:00","Action":"pass","Package":"awkward/pkg_meta","Test":"TestRecordsEveryKindOfMetadata","Elapsed":0}
+{"Time":"2026-09-08T14:28:05.896767+03:00","Action":"run","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel"}
+{"Time":"2026-09-08T14:28:05.896771+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Output":"=== RUN   TestOutputThatLooksLikeASentinel\n"}
+{"Time":"2026-09-08T14:28:05.896774+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Output":"    m_test.go:27: @@QF1@@ this is not really a sentinel @@deadbeef@@\n"}
+{"Time":"2026-09-08T14:28:05.896777+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Output":"    m_test.go:28: @@QF\n"}
+{"Time":"2026-09-08T14:28:05.896809+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Output":"    emit.go:30: @@QF1@@eyJrIjoibGFiZWwiLCJuIjoiYWZ0ZXIiLCJ2IjoidGhlLWRlY295cyJ9@@c9c4ca55@@\n"}
+{"Time":"2026-09-08T14:28:05.896813+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Output":"--- PASS: TestOutputThatLooksLikeASentinel (0.00s)\n"}
+{"Time":"2026-09-08T14:28:05.896818+03:00","Action":"pass","Package":"awkward/pkg_meta","Test":"TestOutputThatLooksLikeASentinel","Elapsed":0}
+{"Time":"2026-09-08T14:28:05.896821+03:00","Action":"run","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest"}
+{"Time":"2026-09-08T14:28:05.896823+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest","Output":"=== RUN   TestMetadataOnASubtestBelongsToTheSubtest\n"}
+{"Time":"2026-09-08T14:28:05.896826+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest","Output":"    emit.go:30: @@QF1@@eyJrIjoibGFiZWwiLCJuIjoibGV2ZWwiLCJ2IjoicGFyZW50In0@@ca51ec3a@@\n"}
+{"Time":"2026-09-08T14:28:05.896829+03:00","Action":"run","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest/child"}
+{"Time":"2026-09-08T14:28:05.896831+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest/child","Output":"=== RUN   TestMetadataOnASubtestBelongsToTheSubtest/child\n"}
+{"Time":"2026-09-08T14:28:05.896834+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest/child","Output":"    emit.go:30: @@QF1@@eyJrIjoibGFiZWwiLCJuIjoibGV2ZWwiLCJ2IjoiY2hpbGQifQ@@29a7f9a4@@\n"}
+{"Time":"2026-09-08T14:28:05.896837+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest/child","Output":"--- PASS: TestMetadataOnASubtestBelongsToTheSubtest/child (0.00s)\n"}
+{"Time":"2026-09-08T14:28:05.896839+03:00","Action":"pass","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest/child","Elapsed":0}
+{"Time":"2026-09-08T14:28:05.896848+03:00","Action":"output","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest","Output":"--- PASS: TestMetadataOnASubtestBelongsToTheSubtest (0.00s)\n"}
+{"Time":"2026-09-08T14:28:05.896851+03:00","Action":"pass","Package":"awkward/pkg_meta","Test":"TestMetadataOnASubtestBelongsToTheSubtest","Elapsed":0}
+{"Time":"2026-09-08T14:28:05.896854+03:00","Action":"output","Package":"awkward/pkg_meta","Output":"PASS\n"}
+{"Time":"2026-09-08T14:28:05.897581+03:00","Action":"output","Package":"awkward/pkg_meta","Output":"ok  \tawkward/pkg_meta\t0.337s\n"}
+{"Time":"2026-09-08T14:28:05.897592+03:00","Action":"pass","Package":"awkward/pkg_meta","Elapsed":0.337}

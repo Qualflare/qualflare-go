@@ -1,0 +1,79 @@
+{"Time":"2026-09-08T14:12:48.729921+03:00","Action":"start","Package":"awkward/pkg_pass"}
+{"Time":"2026-09-08T14:12:48.730095+03:00","Action":"start","Package":"awkward/pkg_subtests"}
+{"Time":"2026-09-08T14:12:48.73016+03:00","Action":"start","Package":"awkward/pkg_notests"}
+{"Time":"2026-09-08T14:12:48.730197+03:00","Action":"output","Package":"awkward/pkg_notests","Output":"?   \tawkward/pkg_notests\t[no test files]\n"}
+{"Time":"2026-09-08T14:12:48.730217+03:00","Action":"skip","Package":"awkward/pkg_notests","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.205066+03:00","Action":"run","Package":"awkward/pkg_pass","Test":"TestPasses"}
+{"Time":"2026-09-08T14:12:49.205201+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestPasses","Output":"=== RUN   TestPasses\n"}
+{"Time":"2026-09-08T14:12:49.205255+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestPasses","Output":"--- PASS: TestPasses (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.205276+03:00","Action":"pass","Package":"awkward/pkg_pass","Test":"TestPasses","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.205291+03:00","Action":"run","Package":"awkward/pkg_pass","Test":"TestSkippedUpFront"}
+{"Time":"2026-09-08T14:12:49.2053+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedUpFront","Output":"=== RUN   TestSkippedUpFront\n"}
+{"Time":"2026-09-08T14:12:49.20531+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedUpFront","Output":"    a_test.go:7: deliberate\n"}
+{"Time":"2026-09-08T14:12:49.20532+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedUpFront","Output":"--- SKIP: TestSkippedUpFront (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.205335+03:00","Action":"skip","Package":"awkward/pkg_pass","Test":"TestSkippedUpFront","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.205345+03:00","Action":"run","Package":"awkward/pkg_pass","Test":"TestSkippedMidway"}
+{"Time":"2026-09-08T14:12:49.205357+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedMidway","Output":"=== RUN   TestSkippedMidway\n"}
+{"Time":"2026-09-08T14:12:49.205366+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedMidway","Output":"    a_test.go:10: did some work first\n"}
+{"Time":"2026-09-08T14:12:49.205375+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedMidway","Output":"    a_test.go:11: gave up halfway\n"}
+{"Time":"2026-09-08T14:12:49.205385+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"TestSkippedMidway","Output":"--- SKIP: TestSkippedMidway (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.205394+03:00","Action":"skip","Package":"awkward/pkg_pass","Test":"TestSkippedMidway","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.205403+03:00","Action":"run","Package":"awkward/pkg_pass","Test":"ExampleThing"}
+{"Time":"2026-09-08T14:12:49.205411+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"ExampleThing","Output":"=== RUN   ExampleThing\n"}
+{"Time":"2026-09-08T14:12:49.205432+03:00","Action":"output","Package":"awkward/pkg_pass","Test":"ExampleThing","Output":"--- PASS: ExampleThing (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.205443+03:00","Action":"pass","Package":"awkward/pkg_pass","Test":"ExampleThing","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.205453+03:00","Action":"output","Package":"awkward/pkg_pass","Output":"PASS\n"}
+{"Time":"2026-09-08T14:12:49.206287+03:00","Action":"output","Package":"awkward/pkg_pass","Output":"ok  \tawkward/pkg_pass\t0.476s\n"}
+{"Time":"2026-09-08T14:12:49.206325+03:00","Action":"pass","Package":"awkward/pkg_pass","Elapsed":0.476}
+{"Time":"2026-09-08T14:12:49.533009+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass"}
+{"Time":"2026-09-08T14:12:49.533135+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass","Output":"=== RUN   TestParentFailsAllSubtestsPass\n"}
+{"Time":"2026-09-08T14:12:49.533178+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_one"}
+{"Time":"2026-09-08T14:12:49.53322+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_one","Output":"=== RUN   TestParentFailsAllSubtestsPass/sub_one\n"}
+{"Time":"2026-09-08T14:12:49.533326+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_one","Output":"--- PASS: TestParentFailsAllSubtestsPass/sub_one (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533347+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_one","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533362+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_two"}
+{"Time":"2026-09-08T14:12:49.53337+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_two","Output":"=== RUN   TestParentFailsAllSubtestsPass/sub_two\n"}
+{"Time":"2026-09-08T14:12:49.533382+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_two","Output":"--- PASS: TestParentFailsAllSubtestsPass/sub_two (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533389+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass/sub_two","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533397+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass","Output":"    b_test.go:10: parent-level assertion failed after its subtests passed\n"}
+{"Time":"2026-09-08T14:12:49.533404+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass","Output":"--- FAIL: TestParentFailsAllSubtestsPass (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533411+03:00","Action":"fail","Package":"awkward/pkg_subtests","Test":"TestParentFailsAllSubtestsPass","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533427+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests"}
+{"Time":"2026-09-08T14:12:49.533451+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests","Output":"=== RUN   TestParentPassesWithSubtests\n"}
+{"Time":"2026-09-08T14:12:49.533486+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/alpha"}
+{"Time":"2026-09-08T14:12:49.533498+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/alpha","Output":"=== RUN   TestParentPassesWithSubtests/alpha\n"}
+{"Time":"2026-09-08T14:12:49.533507+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/alpha","Output":"--- PASS: TestParentPassesWithSubtests/alpha (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533514+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/alpha","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533524+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/beta"}
+{"Time":"2026-09-08T14:12:49.53353+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/beta","Output":"=== RUN   TestParentPassesWithSubtests/beta\n"}
+{"Time":"2026-09-08T14:12:49.533537+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/beta","Output":"--- PASS: TestParentPassesWithSubtests/beta (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533543+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests/beta","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.53355+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests","Output":"--- PASS: TestParentPassesWithSubtests (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533557+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestParentPassesWithSubtests","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533576+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestDeepNesting"}
+{"Time":"2026-09-08T14:12:49.533584+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting","Output":"=== RUN   TestDeepNesting\n"}
+{"Time":"2026-09-08T14:12:49.53359+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a"}
+{"Time":"2026-09-08T14:12:49.533609+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a","Output":"=== RUN   TestDeepNesting/a\n"}
+{"Time":"2026-09-08T14:12:49.533623+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b"}
+{"Time":"2026-09-08T14:12:49.53363+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b","Output":"=== RUN   TestDeepNesting/a/b\n"}
+{"Time":"2026-09-08T14:12:49.533636+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b/c"}
+{"Time":"2026-09-08T14:12:49.533642+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b/c","Output":"=== RUN   TestDeepNesting/a/b/c\n"}
+{"Time":"2026-09-08T14:12:49.533664+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b/c","Output":"--- PASS: TestDeepNesting/a/b/c (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533672+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b/c","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533679+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b","Output":"--- PASS: TestDeepNesting/a/b (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533685+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a/b","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533692+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a","Output":"--- PASS: TestDeepNesting/a (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533698+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestDeepNesting/a","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533705+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestDeepNesting","Output":"--- PASS: TestDeepNesting (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533711+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestDeepNesting","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533717+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces"}
+{"Time":"2026-09-08T14:12:49.533723+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces","Output":"=== RUN   TestSubtestNameWithSpaces\n"}
+{"Time":"2026-09-08T14:12:49.53373+03:00","Action":"run","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces/name_with_spaces"}
+{"Time":"2026-09-08T14:12:49.533735+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces/name_with_spaces","Output":"=== RUN   TestSubtestNameWithSpaces/name_with_spaces\n"}
+{"Time":"2026-09-08T14:12:49.533742+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces/name_with_spaces","Output":"--- PASS: TestSubtestNameWithSpaces/name_with_spaces (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533748+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces/name_with_spaces","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533755+03:00","Action":"output","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces","Output":"--- PASS: TestSubtestNameWithSpaces (0.00s)\n"}
+{"Time":"2026-09-08T14:12:49.533761+03:00","Action":"pass","Package":"awkward/pkg_subtests","Test":"TestSubtestNameWithSpaces","Elapsed":0}
+{"Time":"2026-09-08T14:12:49.533767+03:00","Action":"output","Package":"awkward/pkg_subtests","Output":"FAIL\n"}
+{"Time":"2026-09-08T14:12:49.534385+03:00","Action":"output","Package":"awkward/pkg_subtests","Output":"FAIL\tawkward/pkg_subtests\t0.804s\n"}
+{"Time":"2026-09-08T14:12:49.534409+03:00","Action":"fail","Package":"awkward/pkg_subtests","Elapsed":0.804}

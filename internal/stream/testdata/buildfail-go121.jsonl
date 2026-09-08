@@ -1,0 +1,9 @@
+FAIL	bspike/broken [setup failed]
+{"Time":"2026-09-08T13:57:19.62188+03:00","Action":"start","Package":"bspike/ok"}
+{"Time":"2026-09-08T13:57:19.963329+03:00","Action":"run","Package":"bspike/ok","Test":"TestPasses"}
+{"Time":"2026-09-08T13:57:19.963451+03:00","Action":"output","Package":"bspike/ok","Test":"TestPasses","Output":"=== RUN   TestPasses\n"}
+{"Time":"2026-09-08T13:57:19.963547+03:00","Action":"output","Package":"bspike/ok","Test":"TestPasses","Output":"--- PASS: TestPasses (0.00s)\n"}
+{"Time":"2026-09-08T13:57:19.963569+03:00","Action":"pass","Package":"bspike/ok","Test":"TestPasses","Elapsed":0}
+{"Time":"2026-09-08T13:57:19.963601+03:00","Action":"output","Package":"bspike/ok","Output":"PASS\n"}
+{"Time":"2026-09-08T13:57:19.964144+03:00","Action":"output","Package":"bspike/ok","Output":"ok  \tbspike/ok\t0.342s\n"}
+{"Time":"2026-09-08T13:57:19.96419+03:00","Action":"pass","Package":"bspike/ok","Elapsed":0.342}

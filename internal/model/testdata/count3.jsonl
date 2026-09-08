@@ -1,0 +1,29 @@
+{"Time":"2026-09-08T14:12:53.924406+03:00","Action":"start","Package":"awkward/pkg_count"}
+{"Time":"2026-09-08T14:12:54.482842+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration"}
+{"Time":"2026-09-08T14:12:54.482901+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"=== RUN   TestFailsOnlyOnTheFirstIteration\n"}
+{"Time":"2026-09-08T14:12:54.482926+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"    g_test.go:11: failing on iteration 1\n"}
+{"Time":"2026-09-08T14:12:54.482933+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"--- FAIL: TestFailsOnlyOnTheFirstIteration (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.482942+03:00","Action":"fail","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.482949+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestAlwaysPasses"}
+{"Time":"2026-09-08T14:12:54.482952+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"=== RUN   TestAlwaysPasses\n"}
+{"Time":"2026-09-08T14:12:54.482961+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"--- PASS: TestAlwaysPasses (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.482968+03:00","Action":"pass","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.482972+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration"}
+{"Time":"2026-09-08T14:12:54.482975+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"=== RUN   TestFailsOnlyOnTheFirstIteration\n"}
+{"Time":"2026-09-08T14:12:54.482983+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"--- PASS: TestFailsOnlyOnTheFirstIteration (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.482987+03:00","Action":"pass","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.482991+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestAlwaysPasses"}
+{"Time":"2026-09-08T14:12:54.482994+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"=== RUN   TestAlwaysPasses\n"}
+{"Time":"2026-09-08T14:12:54.482997+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"--- PASS: TestAlwaysPasses (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.483011+03:00","Action":"pass","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.483014+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration"}
+{"Time":"2026-09-08T14:12:54.483017+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"=== RUN   TestFailsOnlyOnTheFirstIteration\n"}
+{"Time":"2026-09-08T14:12:54.48302+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Output":"--- PASS: TestFailsOnlyOnTheFirstIteration (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.483023+03:00","Action":"pass","Package":"awkward/pkg_count","Test":"TestFailsOnlyOnTheFirstIteration","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.483026+03:00","Action":"run","Package":"awkward/pkg_count","Test":"TestAlwaysPasses"}
+{"Time":"2026-09-08T14:12:54.483029+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"=== RUN   TestAlwaysPasses\n"}
+{"Time":"2026-09-08T14:12:54.483054+03:00","Action":"output","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Output":"--- PASS: TestAlwaysPasses (0.00s)\n"}
+{"Time":"2026-09-08T14:12:54.483068+03:00","Action":"pass","Package":"awkward/pkg_count","Test":"TestAlwaysPasses","Elapsed":0}
+{"Time":"2026-09-08T14:12:54.483072+03:00","Action":"output","Package":"awkward/pkg_count","Output":"FAIL\n"}
+{"Time":"2026-09-08T14:12:54.483685+03:00","Action":"output","Package":"awkward/pkg_count","Output":"FAIL\tawkward/pkg_count\t0.559s\n"}
+{"Time":"2026-09-08T14:12:54.483716+03:00","Action":"fail","Package":"awkward/pkg_count","Elapsed":0.559}
