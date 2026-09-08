@@ -2,6 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/Qualflare/qualflare-go.svg)](https://pkg.go.dev/github.com/Qualflare/qualflare-go)
 [![CI](https://github.com/Qualflare/qualflare-go/actions/workflows/ci.yml/badge.svg)](https://github.com/Qualflare/qualflare-go/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Qualflare/qualflare-go/branch/main/graph/badge.svg)](https://codecov.io/gh/Qualflare/qualflare-go)
 [![Qualflare](https://api.qualflare.com/p/qualflare-go/badge.svg)](https://reports.qualflare.com/p/qualflare-go/launches)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 
@@ -38,6 +39,16 @@ That splits the package in two, and the split explains most of what follows:
 ```bash
 go install github.com/Qualflare/qualflare-go/cmd/qualflare-go@latest
 ```
+
+Or from Homebrew, which is easier to pin in a CI image without a Go toolchain:
+
+```bash
+brew install qualflare/tap/qualflare-go
+```
+
+Signed binaries for linux, macOS and windows on amd64 and arm64 are attached to
+each [release](https://github.com/Qualflare/qualflare-go/releases), with a
+cosign signature over `checksums.txt`.
 
 For the metadata API, add the module to your own project:
 
@@ -188,6 +199,20 @@ subtest, a goroutine panic, a timeout, `os.Exit(3)`, a package with no test
 files, eight parallel tests logging 100 KB each. The unit tests run against
 streams captured from really running it, so a diff in a capture is itself the
 alarm that a Go release changed the output shape.
+
+## Related reporters
+
+Qualflare has a native reporter for each framework, all writing the same report
+format so one `qf collect` handles a polyglot repository:
+
+[jest](https://github.com/Qualflare/qualflare-jest) ·
+[vitest](https://github.com/Qualflare/qualflare-vitest) ·
+[mocha](https://github.com/Qualflare/qualflare-mocha) ·
+[cypress](https://github.com/Qualflare/qualflare-cypress) ·
+[playwright](https://github.com/Qualflare/qualflare-playwright) ·
+[cucumberjs](https://github.com/Qualflare/qualflare-cucumberjs) ·
+[pytest](https://github.com/Qualflare/qualflare-pytest) ·
+[cli](https://github.com/Qualflare/qualflare-cli)
 
 ## License
 
