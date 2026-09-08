@@ -19,9 +19,12 @@ jobs:
           go-version: stable
           cache: true
 
+      # buildfail/ is excluded because it deliberately does not parse -- that is
+      # the entire point of the fixture, and gofmt cannot format what it cannot
+      # parse.
       - name: gofmt
         run: |
-          unformatted=$(gofmt -l .)
+          unformatted=$(gofmt -l $(git ls-files '*.go' | grep -v '^test/integration/fixtures/buildfail/'))
           if [ -n "$unformatted" ]; then
             echo "::error::gofmt would rewrite:"; echo "$unformatted"
             exit 1

@@ -1,7 +1,8 @@
 # qualflare-go
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/Qualflare/qualflare-go.svg)](https://pkg.go.dev/github.com/Qualflare/qualflare-go)
-[![Go 1.21+](https://img.shields.io/badge/Go-1.21%2B-00ADD8.svg)](https://go.dev/dl/)
+[![CI](https://github.com/Qualflare/qualflare-go/actions/workflows/ci.yml/badge.svg)](https://github.com/Qualflare/qualflare-go/actions/workflows/ci.yml)
+[![Qualflare](https://api.qualflare.com/p/qualflare-go/badge.svg)](https://reports.qualflare.com/p/qualflare-go/launches)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 
 A native Go test reporter for [Qualflare](https://qualflare.com) — captures results
@@ -9,10 +10,9 @@ directly from `go test`: statuses Go's JSON stream can express but nobody reads,
 subtests as first-class cases, nested steps, attachments, and author-facing
 metadata (labels, links, tags, priority, custom parameters).
 
-> **Pre-release.** The library and the report pipeline are built and tested; the
-> `qualflare-go` binary is still being assembled, so the Quickstart below does
-> not work yet. Nothing here is published. This notice goes away with the first
-> tagged release.
+> **Unreleased.** Everything below works from a source checkout, but there is
+> no tagged release yet, so `go install ...@latest` has nothing to fetch. Build
+> it with `go build ./cmd/qualflare-go` in the meantime.
 
 Without it, Go results reach Qualflare through `qualflare-cli`'s `go test -json`
 parser, which records a status, a duration and a name — no steps, no
@@ -143,6 +143,21 @@ Precedence, highest first: **flag → `QUALFLARE_*` environment → CI/git detec
 There is deliberately no config file and no token option. The reporter makes no
 network calls, so it has no credential; `qf login` holds it.
 
+## Test reports
+
+This reporter is tested with itself. `e2e/` is a Go suite covering this
+package's own behaviour — the metadata API, nested steps, subtests as cases,
+attachments and the step-cap regression — run by this reporter and uploaded to
+Qualflare on every merge to `main` by the **published** `qualflare-cli`. The
+results below are that suite's, reported through the code this README documents:
+
+[![Qualflare](https://api.qualflare.com/p/qualflare-go/banner.svg)](https://reports.qualflare.com/p/qualflare-go/launches)
+
+Every case there is meant to pass, so a red run is a real regression rather than
+a fixture failing on purpose. The deliberately awkward cases — panics, timeouts,
+`os.Exit`, a package that does not compile — live in
+`test/integration/fixtures/`, which is never uploaded.
+
 ## Known limitations
 
 - **Go has no retry concept.** `retryCount`, `isFlaky` and `attempts` are
@@ -163,7 +178,12 @@ Full details in [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md).
 ```bash
 go test ./...                  # unit
 go test -race ./...
-go vet ./... && gofmt -l .
+go vet ./...
+go build -o /tmp/qualflare-go ./cmd/qualflare-go
+
+# the dogfood, then the check that runs before any upload
+cd e2e && /tmp/qualflare-go --output-dir e2e-results -- go test -count=1 ./...
+QUALFLARE_OUTPUT_DIR=e2e-results go run ./verify
 ```
 
 `test/integration/fixtures/awkward` is a separate module of deliberately
