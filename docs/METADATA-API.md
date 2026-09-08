@@ -93,6 +93,27 @@ signature that cannot accept one cannot leak one.
 qualflare.MaskedParameter(t, "token")
 ```
 
+## `Attach(tb, name, data, mimeType)` and `AttachText(tb, name, text, mimeType)`
+
+Records bytes against the current test. `AttachText` defaults the mime type to
+`text/plain`.
+
+```go
+qualflare.AttachText(t, "request", string(body), "application/json")
+qualflare.Attach(t, "snapshot", raw, "application/octet-stream")
+```
+
+The payload travels **inline**, base64-encoded, inside a single log line, so it
+is bounded. Anything that will not fit is dropped with a warning rather than
+truncated — half a base64 payload is not a usable file, and an oversized body is
+rejected whole, which would lose the entire launch rather than one attachment.
+The warning reaches the report as a `qualflare.warnings` property on the case.
+
+There is no file-attachment call. Referencing a file by path requires a spill
+directory whose lifetime outlives the test, and `t.TempDir()` is deleted before
+the reporter reads anything — so a path-based API would look like flaky
+attachment loss. Read the bytes and pass them.
+
 ## `Step(tb, name, fn)`
 
 Records a named step around `fn`. Steps nest lexically:
@@ -122,5 +143,9 @@ with a warning, and the ones already open keep their own timing.
 
 ## Caps
 
-Applied per case, with anything beyond dropped and a warning logged: 300 steps,
-50 parameters per step, 50 attachments, 100 labels, 20 links, 64 tags.
+Applied per case, with anything beyond dropped: 300 steps, 50 parameters per
+step, 50 attachments, 100 labels, 20 links, 64 tags.
+
+A drop is never silent. The case carries a `qualflare.warnings` property saying
+what was lost, so a test that quietly shed twenty steps says so in the report
+rather than only in a log nobody reads.

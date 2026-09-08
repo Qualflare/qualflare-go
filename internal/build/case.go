@@ -2,6 +2,7 @@
 package build
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -31,26 +32,53 @@ type occurrenceView struct {
 	warnings []string
 }
 
-// Case turns one test into one wire Case. Returns false when the test should
-// not be reported at all.
-func Case(pkg *model.Package, t *model.Test, opts Options) (wire.Case, bool) {
+// Cases turns one test into the cases it should contribute. Returns false when
+// the test should not be reported at all.
+//
+// It returns a SLICE because of --repeat=split: `-count=20` is a flake hunt,
+// and "the last run passed" is a misleading summary of one, so each occurrence
+// becomes its own case. Every other mode returns exactly one.
+func Cases(pkg *model.Package, t *model.Test, opts Options) ([]wire.Case, bool) {
 	views := make([]occurrenceView, 0, len(t.Occurrences))
 	for _, occ := range t.Occurrences {
 		views = append(views, splitOutput(occ))
 	}
 	if len(views) == 0 {
-		return wire.Case{}, false
+		return nil, false
 	}
 
 	if !keepTest(pkg, t, views) {
-		return wire.Case{}, false
+		return nil, false
+	}
+
+	if opts.Repeat == "split" && len(views) > 1 {
+		out := make([]wire.Case, 0, len(views))
+		for i := range views {
+			c := buildOne(pkg, t, views[i], opts)
+			// Distinct ids, or the server merges what the user asked to see
+			// separately -- which would defeat the entire point of the mode.
+			c.ID = fmt.Sprintf("%s#%d", c.ID, i+1)
+			c.Name = fmt.Sprintf("%s #%d", c.Name, i+1)
+			c.Duration = views[i].occ.ElapsedNanos
+			out = append(out, c)
+		}
+		return out, true
 	}
 
 	// The LAST occurrence decided the outcome, so it is the one the case
 	// mirrors. api-service's migration 0243 makes "the final attempt mirrors
 	// the case" an invariant, so status and duration must both come from here.
 	final := views[len(views)-1]
+	c := buildOne(pkg, t, final, opts)
 
+	if len(views) > 1 {
+		applyAttempts(&c, views)
+	}
+	return []wire.Case{c}, true
+}
+
+// buildOne renders a single occurrence as a case.
+func buildOne(pkg *model.Package, t *model.Test, final occurrenceView, opts Options) wire.Case {
 	c := wire.Case{
 		ID:        pkg.Name + "." + t.Name,
 		Name:      t.Name,
@@ -77,15 +105,15 @@ func Case(pkg *model.Package, t *model.Test, opts Options) (wire.Case, bool) {
 	// attempt's would double-count them.
 	r := replay.Replay(final.messages)
 	applyMetadata(&c, r)
+	// Warnings were previously collected and discarded. A test that silently
+	// lost twenty steps at the cap, or whose metadata line failed to decode,
+	// said nothing at all in the report.
+	applyWarnings(&c, append(append([]string{}, final.warnings...), r.Warnings...))
 
 	if opts.ShardIndex != nil {
 		c.ShardIndex = opts.ShardIndex
 	}
-
-	if len(views) > 1 && opts.Repeat != "split" {
-		applyAttempts(&c, views)
-	}
-	return c, true
+	return c
 }
 
 // keepTest decides whether a test reaches the report.
@@ -133,6 +161,16 @@ func isFailure(status string) bool {
 		return true
 	}
 	return false
+}
+
+func applyWarnings(c *wire.Case, warnings []string) {
+	if len(warnings) == 0 {
+		return
+	}
+	if c.Properties == nil {
+		c.Properties = map[string]string{}
+	}
+	c.Properties["qualflare.warnings"] = textutil.Truncate(strings.Join(warnings, "; "), 2048)
 }
 
 func applyMetadata(c *wire.Case, r replay.Replayed) {
