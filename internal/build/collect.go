@@ -73,7 +73,32 @@ func Collect(in Input) wire.Collect {
 	}
 
 	applyBackstop(&c, in)
+	applyDiagnostics(&c, in)
 	return c
+}
+
+// applyDiagnostics records what the decoder had to tolerate.
+//
+// These were previously counted and thrown away, which is the wrong default: a
+// non-zero value here means the report may be missing the only evidence of a
+// failure, and on a fresh Go release it is the drift alarm saying a new action
+// or output shape has shipped. A clean run adds nothing.
+func applyDiagnostics(c *wire.Collect, in Input) {
+	set := func(k, v string) {
+		if c.Properties == nil {
+			c.Properties = map[string]string{}
+		}
+		c.Properties[k] = v
+	}
+	if in.Stats.UnparsedLines > 0 {
+		set("qualflare.unparsedLines", itoa(in.Stats.UnparsedLines))
+	}
+	if in.Stats.OversizedLines > 0 {
+		set("qualflare.oversizedLines", itoa(in.Stats.OversizedLines))
+	}
+	for action, n := range in.Stats.UnknownActions {
+		set("qualflare.unknownAction."+action, itoa(n))
+	}
 }
 
 // Suite turns one package into one wire Suite. Returns false for a package that
@@ -89,15 +114,15 @@ func Suite(run *model.Run, pkg *model.Package, opts Options) (wire.Suite, bool) 
 		if len(s.Cases) >= constants.MaxCasesPerSuite {
 			break
 		}
-		if c, ok := Case(pkg, pkg.Tests[name], opts); ok {
-			s.Cases = append(s.Cases, c)
+		if cs, ok := Cases(pkg, pkg.Tests[name], opts); ok {
+			s.Cases = append(s.Cases, cs...)
 		}
 	}
 
 	// A package that failed with nothing to blame it on -- a build failure, a
 	// TestMain that exited, a panic before any test reported. Without this a
 	// broken build uploads a GREEN launch.
-	if pkg.Status == "fail" && !anyCaseFailed(s.Cases) {
+	if pkg.Status == "fail" && !anythingExplainsAFailure(s.Cases) {
 		s.Cases = append(s.Cases, packageFailureCase(run, pkg))
 	}
 
@@ -110,10 +135,22 @@ func Suite(run *model.Run, pkg *model.Package, opts Options) (wire.Suite, bool) 
 	return s, true
 }
 
-func anyCaseFailed(cases []wire.Case) bool {
+// anythingExplainsAFailure reports whether some case already accounts for the
+// package having failed.
+//
+// A case's ATTEMPTS count, not just its final status. Under -count a flaky test
+// makes the package fail while every final status is passed -- the failure is
+// attributed, to an earlier attempt -- and looking only at final statuses
+// synthesises a phantom "[package failure]" on top of every flaky run.
+func anythingExplainsAFailure(cases []wire.Case) bool {
 	for _, c := range cases {
 		if isFailure(c.Status) {
 			return true
+		}
+		for _, a := range c.Attempts {
+			if isFailure(a.Status) {
+				return true
+			}
 		}
 	}
 	return false
@@ -158,7 +195,7 @@ func applyBackstop(c *wire.Collect, in Input) {
 		return
 	}
 	for _, s := range c.Suites {
-		if anyCaseFailed(s.Cases) {
+		if anythingExplainsAFailure(s.Cases) {
 			return
 		}
 	}

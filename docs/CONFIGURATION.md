@@ -58,6 +58,21 @@ checkout, so it degrades to nothing rather than being recorded.
 distinguishes "not reported" from "absent", so a guess would be worse than a
 null.
 
+## Diagnostics in the report
+
+When the decoder has to tolerate something, it says so in the report rather than
+only on stderr — otherwise a launch could be missing the only evidence of a
+failure and look perfectly healthy.
+
+| Property | Meaning |
+|---|---|
+| `qualflare.unparsedLines` | Lines that were not JSON. Expected on stderr, but a surprise inside the stream. |
+| `qualflare.oversizedLines` | Lines past the 16 MiB cap, truncated so decoding could continue. |
+| `qualflare.unknownAction.<name>` | Events with an action this build does not read — on a fresh Go release, the drift alarm. |
+| `qualflare.warnings` (per case) | What that case lost: steps or attachments dropped at a cap, or a metadata line that failed to decode. |
+
+A clean run adds none of these.
+
 ## Why the library emits nothing under plain `go test`
 
 Metadata travels as encoded lines in the test log, so emitting it when nothing
