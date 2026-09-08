@@ -1,0 +1,78 @@
+# Cutting a release: push a tag.
+#
+#   git tag -a v0.1.0 -m "v0.1.0" && git push origin v0.1.0
+#
+# There is no version file to keep in step -- the version comes from the tag,
+# through ldflags at build time and through the module version for `go install`.
+# The gate below asserts the built binary actually reports the tag, which is the
+# Go equivalent of the tag-vs-manifest check the npm and PyPI reporters run.
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write # keyless cosign signing via Sigstore OIDC
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # goreleaser needs the full history for its changelog
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: true
+
+      # The full gate, at the exact bytes about to be published. A release is
+      # the worst possible moment to discover the suite was red.
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "::error::gofmt would rewrite:"; echo "$unformatted"; exit 1
+          fi
+      - run: go vet ./...
+      - run: go test -race ./...
+
+      - name: No external dependencies
+        run: |
+          modules=$(go list -m all | grep -v '^github.com/Qualflare/qualflare-go$' || true)
+          if [ -n "$modules" ]; then
+            echo "::error::unexpected module dependencies:"; echo "$modules"; exit 1
+          fi
+
+      - name: The binary reports the tag it was built from
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          go build -ldflags "-X github.com/Qualflare/qualflare-go/internal/version.Version=$tag" \
+            -o /tmp/qualflare-go ./cmd/qualflare-go
+          reported=$(/tmp/qualflare-go -version | head -1)
+          echo "tag=$tag reported=$reported"
+          case "$reported" in
+            *"$tag"*) ;;
+            *) echo "::error::built binary reports '$reported', which does not contain the tag '$tag'"; exit 1 ;;
+          esac
+
+      - uses: sigstore/cosign-installer@v3
+      - uses: anchore/sbom-action/download-syft@v0
+
+      - name: goreleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Absent on a fork or before the tap is configured; the brews block
+          # skips itself rather than failing the release.
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}

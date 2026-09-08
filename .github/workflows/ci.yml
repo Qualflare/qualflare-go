@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint, vet, unit test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: true
+
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "::error::gofmt would rewrite:"; echo "$unformatted"
+            exit 1
+          fi
+
+      - run: go vet ./...
+
+      # -race because the library is written to from user goroutines.
+      - name: Unit tests
+        run: go test -race ./...
+
+  matrix:
+    name: Go ${{ matrix.go }}
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 1.21 is the module floor. 1.24 is the first release that reports build
+        # failures as JSON events, so the legs either side of it exercise
+        # genuinely different stream shapes.
+        go: ['1.21', '1.23', '1.24', '1.26']
+    env:
+      # Without this a `go` directive newer than the leg silently downloads and
+      # execs a newer toolchain, and all four legs test the same version -- green
+      # across the board while every version-specific rule goes unverified.
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go }}
+          cache: true
+
+      - name: Confirm the toolchain under test is the one requested
+        run: |
+          actual=$(go env GOVERSION)
+          echo "matrix asked for go${{ matrix.go }}, toolchain reports $actual"
+          case "$actual" in
+            go${{ matrix.go }}|go${{ matrix.go }}.*) ;;
+            *) echo "::error::toolchain is $actual, not go${{ matrix.go }} -- GOTOOLCHAIN switched underneath us"; exit 1 ;;
+          esac
+
+      - run: go build ./...
+      - run: go test ./...
+
+  fixture-module:
+    name: Awkward fixtures build
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      # The fixture module is deliberately outside the main module so `go
+      # build ./...` never compiles it. It still has to stay buildable, or the
+      # captured streams silently stop matching what it would produce today.
+      - name: Vet the fixture module
+        working-directory: test/integration/fixtures/awkward
+        run: go vet ./...
+
+  no-network:
+    name: The library makes no network calls
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      # Proved over the real transitive import graph rather than by grepping
+      # source: a mock can lie about the network, an absent package cannot.
+      - name: No HTTP client in the public package
+        run: |
+          deps=$(go list -deps .)
+          for forbidden in net/http net crypto/tls; do
+            if echo "$deps" | grep -qx "$forbidden"; then
+              echo "::error::the public package imports $forbidden"
+              exit 1
+            fi
+          done
+          echo "clean: $(echo "$deps" | wc -l) transitive imports, none of them a network client"
+
+  no-deps:
+    name: Zero external dependencies
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      # A reporter that drags a dependency into every user's go.mod is a tax.
+      # Making it a gate makes it a promise.
+      - name: go list -m all is this module alone
+        run: |
+          modules=$(go list -m all | grep -v '^github.com/Qualflare/qualflare-go$' || true)
+          if [ -n "$modules" ]; then
+            echo "::error::unexpected module dependencies:"; echo "$modules"
+            exit 1
+          fi
+          echo "no external modules"
