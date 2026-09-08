@@ -10,10 +10,6 @@ directly from `go test`: statuses Go's JSON stream can express but nobody reads,
 subtests as first-class cases, nested steps, attachments, and author-facing
 metadata (labels, links, tags, priority, custom parameters).
 
-> **Unreleased.** Everything below works from a source checkout, but there is
-> no tagged release yet, so `go install ...@latest` has nothing to fetch. Build
-> it with `go build ./cmd/qualflare-go` in the meantime.
-
 Without it, Go results reach Qualflare through `qualflare-cli`'s `go test -json`
 parser, which records a status, a duration and a name — no steps, no
 attachments, no metadata, no flakiness, and every non-terminal outcome flattened
