@@ -1,0 +1,14 @@
+{"ImportPath":"bspike/broken.test","Action":"build-output","Output":"# bspike/broken\n"}
+{"ImportPath":"bspike/broken.test","Action":"build-output","Output":"broken/broken_test.go:6:7: expected ';', found is\n"}
+{"ImportPath":"bspike/broken.test","Action":"build-fail"}
+{"Time":"2026-09-08T13:57:18.505278+03:00","Action":"start","Package":"bspike/broken"}
+{"Time":"2026-09-08T13:57:18.505303+03:00","Action":"output","Package":"bspike/broken","Output":"FAIL\tbspike/broken [setup failed]\n"}
+{"Time":"2026-09-08T13:57:18.505309+03:00","Action":"fail","Package":"bspike/broken","Elapsed":0,"FailedBuild":"bspike/broken.test"}
+{"Time":"2026-09-08T13:57:18.614494+03:00","Action":"start","Package":"bspike/ok"}
+{"Time":"2026-09-08T13:57:19.151211+03:00","Action":"run","Package":"bspike/ok","Test":"TestPasses"}
+{"Time":"2026-09-08T13:57:19.15127+03:00","Action":"output","Package":"bspike/ok","Test":"TestPasses","Output":"=== RUN   TestPasses\n"}
+{"Time":"2026-09-08T13:57:19.151298+03:00","Action":"output","Package":"bspike/ok","Test":"TestPasses","Output":"--- PASS: TestPasses (0.00s)\n"}
+{"Time":"2026-09-08T13:57:19.151307+03:00","Action":"pass","Package":"bspike/ok","Test":"TestPasses","Elapsed":0}
+{"Time":"2026-09-08T13:57:19.151315+03:00","Action":"output","Package":"bspike/ok","Output":"PASS\n"}
+{"Time":"2026-09-08T13:57:19.151967+03:00","Action":"output","Package":"bspike/ok","Output":"ok  \tbspike/ok\t0.537s\n"}
+{"Time":"2026-09-08T13:57:19.15199+03:00","Action":"pass","Package":"bspike/ok","Elapsed":0.537}
