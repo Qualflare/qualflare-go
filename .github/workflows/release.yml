@@ -37,7 +37,7 @@ jobs:
       # the worst possible moment to discover the suite was red.
       - name: gofmt
         run: |
-          unformatted=$(gofmt -l .)
+          unformatted=$(gofmt -l $(git ls-files '*.go' | grep -v '^test/integration/fixtures/buildfail/'))
           if [ -n "$unformatted" ]; then
             echo "::error::gofmt would rewrite:"; echo "$unformatted"; exit 1
           fi

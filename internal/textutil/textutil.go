@@ -17,3 +17,12 @@ func Truncate(s string, maxRunes int) string {
 	}
 	return string(r[:maxRunes])
 }
+
+// TruncateOr clamps s to maxRunes, falling back to alt when s is empty. It
+// exists so a caller can guarantee a non-empty error string without an if.
+func TruncateOr(s string, maxRunes int, alt string) string {
+	if out := Truncate(s, maxRunes); out != "" {
+		return out
+	}
+	return Truncate(alt, maxRunes)
+}

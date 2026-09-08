@@ -1,0 +1,131 @@
+# Dogfood: qualflare-go reports on a suite of itself, and the PUBLISHED CLI
+# uploads the result to Qualflare.
+#
+# Why this exists: every other suite in this repo stops at the report file on
+# disk, so nothing exercises the reporter/CLI pairing. That seam broke twice in
+# the sibling packages -- `Case.attempts` was silently discarded by the CLI's
+# parser for three releases, and `localImagePath` needed a CLI floor nothing
+# enforced. Both would have shown up here on day one.
+#
+# The CLI is deliberately UNPINNED. A CLI release that stops understanding what
+# this reporter emits should turn this red; that is the whole point.
+#
+# The suite contains NO failing tests by construction. Status mapping for
+# failures, panics, timeouts and build errors stays the job of
+# test/integration/fixtures/awkward, which is never uploaded -- please do not
+# "helpfully" add a failing test here.
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  # NOT cancel-in-progress. Every push to main should produce its own launch;
+  # cancelling would silently drop commits out of the Qualflare trend line,
+  # which is the one thing this workflow exists to provide.
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Dogfood suite + upload to Qualflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # branch/commit come from GITHUB_REF_NAME/GITHUB_SHA, so no history
+          # is needed for detection.
+          fetch-depth: 1
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: true
+
+      - name: Build the reporter
+        run: go build -o "$RUNNER_TEMP/qualflare-go" ./cmd/qualflare-go
+
+      # continue-on-error on the next two, with a gate at the end. A red dogfood
+      # run is precisely the run Qualflare most needs to see: failing before the
+      # upload would hide the regression from the dashboard that exists to show
+      # it. The job still fails -- just after the data is in.
+      - name: Run the dogfood suite
+        id: suite
+        continue-on-error: true
+        working-directory: e2e
+        run: |
+          "$RUNNER_TEMP/qualflare-go" \
+            --output-dir e2e-results \
+            --environment production \
+            -- go test -count=1 ./...
+
+      - name: Verify the report matches what the suite declared
+        id: verify
+        continue-on-error: true
+        working-directory: e2e
+        env:
+          QUALFLARE_OUTPUT_DIR: e2e-results
+        run: go run ./verify
+
+      - name: Install the published CLI
+        run: |
+          npm install -g @qualflare/cli
+          # Printed so a red run caused by a CLI release is diagnosable from the
+          # log alone, without a commit of ours to point at.
+          qf version
+
+      # Captured BEFORE the upload so the step after it can require the number
+      # to move. The script is byte-identical in every reporter repo, so there
+      # is one implementation to fix rather than eight.
+      - name: Record the project's run count before uploading
+        id: runs_before
+        run: echo "count=$(python3 e2e/assert-launch-landed.py qualflare-go --print)" >> "$GITHUB_OUTPUT"
+
+      # `--force` is required: stdin is not a TTY here, and a re-login onto an
+      # existing identifier fails without it. The token is passed via the
+      # environment, NOT argv, so it never lands in the process list. `qf <id>
+      # collect` only EXISTS after a successful login -- the subcommand is built
+      # from the credential store at startup -- so these cannot be reordered.
+      - name: Upload to Qualflare
+        id: upload
+        if: hashFiles('e2e/e2e-results/*.json') != ''
+        env:
+          QF_TOKEN: ${{ secrets.QF_TOKEN }}
+          QF_BRANCH: ${{ github.ref_name }}
+          QF_COMMIT: ${{ github.sha }}
+        run: |
+          if [ -z "$QF_TOKEN" ]; then
+            echo "::error::QF_TOKEN is not set on this repository."
+            exit 1
+          fi
+          qf login qualflare-go --force
+          qf qualflare-go collect ./e2e/e2e-results
+
+      # The upload's exit code only proves the server returned 2xx. This proves
+      # a launch reached the project the README's badge actually reads -- the
+      # two diverged for 11 consecutive green runs on qualflare-jest. Runs after
+      # the upload, so a failure here never costs us the data.
+      - name: Assert the launch reached the project the badge reads
+        if: steps.upload.outcome == 'success'
+        run: python3 e2e/assert-launch-landed.py qualflare-go --before "${{ steps.runs_before.outputs.count }}"
+
+      - name: Keep the report when something went wrong
+        if: steps.suite.outcome != 'success' || steps.verify.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: e2e/e2e-results/
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Fail if the suite or the verifier was red
+        if: steps.suite.outcome != 'success' || steps.verify.outcome != 'success'
+        run: |
+          echo "::error::suite=${{ steps.suite.outcome }} verify=${{ steps.verify.outcome }}"
+          exit 1
