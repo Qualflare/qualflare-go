@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # So CI can be re-run without an empty commit -- needed the first time a
+  # secret is added, since a secret change alone does not trigger anything.
+  workflow_dispatch:
 
 permissions:
   contents: read
