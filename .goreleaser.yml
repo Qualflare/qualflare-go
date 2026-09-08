@@ -67,21 +67,33 @@ signs:
     artifacts: checksum
     output: true
 
-brews:
+# Casks, not formulas: `brews` is deprecated since goreleaser v2.16, and casks
+# now work under Homebrew on Linux too -- the reason the old formula existed.
+# No `directory:` (casks must live in Casks/), no `license:` (casks ignore it),
+# and no `test:` -- casks have no `brew test` equivalent, so the smoke test that
+# ran `qualflare-go -version` on install is gone. The release workflow still
+# runs it against the built binary before publishing.
+homebrew_casks:
   - name: qualflare-go
     repository:
       owner: qualflare
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    directory: Formula
-    homepage: https://github.com/Qualflare/qualflare-go
+    homepage: https://qualflare.com/go-test-reporting/
     description: Native go test reporter for Qualflare
-    license: Apache-2.0
     # Skipped without a token, and never for a prerelease -- an rc tag must not
-    # overwrite the formula `brew install` resolves.
+    # overwrite the cask `brew install` resolves.
     skip_upload: "{{ if and .Env.HOMEBREW_TAP_TOKEN (not .Prerelease) }}false{{ else }}true{{ end }}"
-    test: |
-      system "#{bin}/qualflare-go", "-version"
+    # The binaries carry a cosign signature, which is not Apple notarization.
+    # A cask downloads the archive itself, so macOS quarantines it and reports
+    # "damaged and cannot be opened" -- the old formula never hit this. Guarded
+    # on OS.mac? because this same cask installs on Linux.
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/qualflare-go"]
+          end
 
 changelog:
   sort: asc
