@@ -1,0 +1,12 @@
+{"Time":"2026-09-08T14:14:08.258735+03:00","Action":"start","Package":"awkward/pkg_goroutine_panic"}
+{"Time":"2026-09-08T14:14:08.616923+03:00","Action":"run","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic"}
+{"Time":"2026-09-08T14:14:08.617052+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"=== RUN   TestGoroutinePanic\n"}
+{"Time":"2026-09-08T14:14:08.619543+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"panic: panic from a goroutine the framework does not own\n"}
+{"Time":"2026-09-08T14:14:08.619632+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"\n"}
+{"Time":"2026-09-08T14:14:08.619655+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"goroutine 7 [running]:\n"}
+{"Time":"2026-09-08T14:14:08.619671+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"awkward/pkg_goroutine_panic.TestGoroutinePanic.func1()\n"}
+{"Time":"2026-09-08T14:14:08.619686+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"\t/Users/ibrahim/Astrais/frameworks/qualflare-go/test/integration/fixtures/awkward/pkg_goroutine_panic/h_test.go:12 +0x2c\n"}
+{"Time":"2026-09-08T14:14:08.619737+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"created by awkward/pkg_goroutine_panic.TestGoroutinePanic in goroutine 6\n"}
+{"Time":"2026-09-08T14:14:08.619763+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Test":"TestGoroutinePanic","Output":"\t/Users/ibrahim/Astrais/frameworks/qualflare-go/test/integration/fixtures/awkward/pkg_goroutine_panic/h_test.go:12 +0x24\n"}
+{"Time":"2026-09-08T14:14:08.621011+03:00","Action":"output","Package":"awkward/pkg_goroutine_panic","Output":"FAIL\tawkward/pkg_goroutine_panic\t0.357s\n"}
+{"Time":"2026-09-08T14:14:08.621059+03:00","Action":"fail","Package":"awkward/pkg_goroutine_panic","Elapsed":0.362}

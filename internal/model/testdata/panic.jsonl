@@ -1,0 +1,30 @@
+{"Time":"2026-09-08T14:12:49.722947+03:00","Action":"start","Package":"awkward/pkg_panic"}
+{"Time":"2026-09-08T14:12:50.082108+03:00","Action":"run","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest"}
+{"Time":"2026-09-08T14:12:50.082191+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"=== RUN   TestPanickingSubtest\n"}
+{"Time":"2026-09-08T14:12:50.082219+03:00","Action":"run","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/first_ok"}
+{"Time":"2026-09-08T14:12:50.082225+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/first_ok","Output":"=== RUN   TestPanickingSubtest/first_ok\n"}
+{"Time":"2026-09-08T14:12:50.082232+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/first_ok","Output":"--- PASS: TestPanickingSubtest/first_ok (0.00s)\n"}
+{"Time":"2026-09-08T14:12:50.082237+03:00","Action":"pass","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/first_ok","Elapsed":0}
+{"Time":"2026-09-08T14:12:50.082242+03:00","Action":"run","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/second_panics"}
+{"Time":"2026-09-08T14:12:50.082246+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/second_panics","Output":"=== RUN   TestPanickingSubtest/second_panics\n"}
+{"Time":"2026-09-08T14:12:50.082259+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/second_panics","Output":"--- FAIL: TestPanickingSubtest/second_panics (0.00s)\n"}
+{"Time":"2026-09-08T14:12:50.082263+03:00","Action":"fail","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest/second_panics","Elapsed":0}
+{"Time":"2026-09-08T14:12:50.082272+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"--- FAIL: TestPanickingSubtest (0.00s)\n"}
+{"Time":"2026-09-08T14:12:50.084693+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"panic: deliberate panic in a subtest [recovered, repanicked]\n"}
+{"Time":"2026-09-08T14:12:50.08472+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\n"}
+{"Time":"2026-09-08T14:12:50.084731+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"goroutine 20 [running]:\n"}
+{"Time":"2026-09-08T14:12:50.085073+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"testing.tRunner.func1.2({0x10452da60, 0x104560a40})\n"}
+{"Time":"2026-09-08T14:12:50.085195+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:1974 +0x1a0\n"}
+{"Time":"2026-09-08T14:12:50.085256+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"testing.tRunner.func1()\n"}
+{"Time":"2026-09-08T14:12:50.085294+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:1977 +0x318\n"}
+{"Time":"2026-09-08T14:12:50.085305+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"panic({0x10452da60?, 0x104560a40?})\n"}
+{"Time":"2026-09-08T14:12:50.085315+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/runtime/panic.go:860 +0x12c\n"}
+{"Time":"2026-09-08T14:12:50.085325+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"awkward/pkg_panic.TestPanickingSubtest.func2(0x13b4341e86c8?)\n"}
+{"Time":"2026-09-08T14:12:50.085334+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/Users/ibrahim/Astrais/frameworks/qualflare-go/test/integration/fixtures/awkward/pkg_panic/c_test.go:8 +0x2c\n"}
+{"Time":"2026-09-08T14:12:50.085343+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"testing.tRunner(0x13b4341e86c8, 0x10455ff88)\n"}
+{"Time":"2026-09-08T14:12:50.08541+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2036 +0xc4\n"}
+{"Time":"2026-09-08T14:12:50.085435+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"created by testing.(*T).Run in goroutine 18\n"}
+{"Time":"2026-09-08T14:12:50.085443+03:00","Action":"output","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Output":"\t/opt/homebrew/Cellar/go/1.26.3/libexec/src/testing/testing.go:2101 +0x3a8\n"}
+{"Time":"2026-09-08T14:12:50.085796+03:00","Action":"fail","Package":"awkward/pkg_panic","Test":"TestPanickingSubtest","Elapsed":0}
+{"Time":"2026-09-08T14:12:50.085819+03:00","Action":"output","Package":"awkward/pkg_panic","Output":"FAIL\tawkward/pkg_panic\t0.363s\n"}
+{"Time":"2026-09-08T14:12:50.085833+03:00","Action":"fail","Package":"awkward/pkg_panic","Elapsed":0.363}
