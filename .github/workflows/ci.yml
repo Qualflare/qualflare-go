@@ -34,7 +34,20 @@ jobs:
 
       # -race because the library is written to from user goroutines.
       - name: Unit tests
-        run: go test -race ./...
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
+
+      # Uploaded so the coverage number is verifiable by anyone rather than
+      # asserted in a README. awesome-go's submission check accepts only a
+      # codecov.io or coveralls.io URL, so a self-hosted badge would not do.
+      # fail_ci_if_error is false deliberately: Codecov being down must not turn
+      # a green build red.
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.out
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   matrix:
     name: Go ${{ matrix.go }}
