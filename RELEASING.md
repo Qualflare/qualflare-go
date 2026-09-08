@@ -74,8 +74,25 @@ could not install casks — is no longer true. The generated cask carries an
 The tap still holds the old formulas, and they must stay until a cask has
 actually shipped — deleting them first breaks `brew install` for everyone.
 
-**After the first release that publishes `Casks/qualflare-go.rb`**, in
-`Qualflare/homebrew-tap`:
+**But do not leave both in the tap either.** Measured on Homebrew 6.0.21 with a
+scratch tap holding `Formula/widget.rb` and `Casks/widget.rb`:
+
+```
+$ brew info qftest/collision/widget
+Warning: Treating qftest/collision/widget as a formula. For the cask, use
+qftest/collision/widget or specify the `--cask` flag.
+```
+
+**The formula wins.** So while both exist, `brew install
+qualflare/tap/qualflare-go` keeps resolving to the formula — which goreleaser no
+longer updates, so it silently freezes at its last version while releases move
+on. Users would have to pass `--cask` to get anything current.
+
+Treat the steps below as part of the release rather than follow-up work: cut the
+release, then close the window in the same sitting.
+
+**Immediately after the first release that publishes `Casks/qualflare-go.rb`**,
+in `Qualflare/homebrew-tap`:
 
 1. Add `tap_migrations.json` at the repo root so existing installs move across
    on their next `brew upgrade`:
