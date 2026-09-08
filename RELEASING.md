@@ -63,11 +63,52 @@ result was that eight packages shipped with no discovery work at all.
   product and this is its client. Lists tolerate vendor tools; they do not
   tolerate finding out later.
 
+## One-time: finish the formula → cask migration
+
+`.goreleaser.yml` now publishes a **Cask**, not a Formula. `brews` was
+deprecated in goreleaser v2.16, and the reason it existed — Homebrew on Linux
+could not install casks — is no longer true. The generated cask carries an
+`on_linux` block and declares no `depends_on macos:`, so Homebrew's
+`Cask#supports_linux?` returns true and Linuxbrew installs it.
+
+The tap still holds the old formulas, and they must stay until a cask has
+actually shipped — deleting them first breaks `brew install` for everyone.
+
+**After the first release that publishes `Casks/qualflare-go.rb`**, in
+`Qualflare/homebrew-tap`:
+
+1. Add `tap_migrations.json` at the repo root so existing installs move across
+   on their next `brew upgrade`:
+
+   ```json
+   {
+     "qualflare-go": "qualflare-go",
+     "qf": "qf"
+   }
+   ```
+
+2. Delete the superseded formula: `rm Formula/qualflare-go.rb` (and
+   `Formula/qf.rb` once `qualflare-cli` has also shipped a cask — its
+   `.goreleaser.yml` is migrated but unreleased).
+
+Do not use goreleaser's `conflicts: formula:` for this. Homebrew deprecated that
+stanza; `tap_migrations.json` is the supported path.
+
+**What was lost:** casks have no `brew test` equivalent, so the install-time
+smoke test that ran `qualflare-go -version` is gone. The release workflow still
+runs the binary before publishing, which is the check that actually mattered.
+
+**Why the `xattr` postflight hook exists:** the binaries carry a cosign
+signature, which is not Apple notarization. A cask downloads the archive itself,
+so macOS quarantines it and reports "damaged and cannot be opened" — something
+the old formula never hit. The hook is guarded on `OS.mac?` because the same
+cask installs on Linux.
+
 ## Notes
 
-- A prerelease tag never publishes the Homebrew formula — goreleaser's
+- A prerelease tag never publishes the Homebrew cask — goreleaser's
   `skip_upload` guard checks `not .Prerelease`, so an rc cannot overwrite the
-  formula `brew install` resolves.
+  cask `brew install` resolves.
 - Do **not** add a Go Report Card badge. The service was sunset and the report
   URL now serves a thank-you page. The URL still belongs in the awesome-go PR
   body, because their checker only requires it to resolve.
