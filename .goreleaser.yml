@@ -1,0 +1,139 @@
+# Release configuration for qualflare-go.
+#
+# Cloned from qualflare-cli's, minus the channels that do not fit this audience:
+# no npm (Go developers have a toolchain) and no container image (CI Go images
+# can `go install`). What is kept is the supply-chain posture -- checksums, a
+# CycloneDX SBOM per archive, and a keyless cosign signature over the checksums
+# file -- because that should not vary between the two binaries we ship.
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: qualflare-go
+    main: ./cmd/qualflare-go
+    binary: qualflare-go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X github.com/Qualflare/qualflare-go/internal/version.Version={{.Version}}
+      - -X github.com/Qualflare/qualflare-go/internal/version.Commit={{.Commit}}
+      - -X github.com/Qualflare/qualflare-go/internal/version.Date={{.Date}}
+
+archives:
+  - id: default
+    formats:
+      - tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- .Arch }}
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE*
+      - README*
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+sboms:
+  - artifacts: archive
+
+signs:
+  - cmd: cosign
+    signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
+    args:
+      - sign-blob
+      - "--output-signature=${signature}"
+      - "--output-certificate=${certificate}"
+      - "--yes"
+      - "${artifact}"
+    artifacts: checksum
+    output: true
+
+brews:
+  - name: qualflare-go
+    repository:
+      owner: qualflare
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    directory: Formula
+    homepage: https://github.com/Qualflare/qualflare-go
+    description: Native go test reporter for Qualflare
+    license: Apache-2.0
+    # Skipped without a token, and never for a prerelease -- an rc tag must not
+    # overwrite the formula `brew install` resolves.
+    skip_upload: "{{ if and .Env.HOMEBREW_TAP_TOKEN (not .Prerelease) }}false{{ else }}true{{ end }}"
+    test: |
+      system "#{bin}/qualflare-go", "-version"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))?\!?:.+$'
+      order: 0
+    - title: Bug Fixes
+      regexp: '^.*?fix(\(.+\))?\!?:.+$'
+      order: 1
+    - title: Other
+      order: 99
+
+release:
+  github:
+    owner: Qualflare
+    name: qualflare-go
+  prerelease: auto
+  draft: false
+  name_template: "{{.ProjectName}} v{{.Version}}"
+  footer: |
+    ## Installation
+
+    ### go install
+    ```bash
+    go install github.com/Qualflare/qualflare-go/cmd/qualflare-go@{{ .Tag }}
+    ```
+
+    ### Homebrew (macOS/Linux)
+    ```bash
+    brew install qualflare/tap/qualflare-go
+    ```
+
+    ### Binaries
+    Download an archive below. `checksums.txt` is signed with cosign; verify with:
+    ```bash
+    cosign verify-blob --signature checksums.txt.sig --certificate checksums.txt.pem checksums.txt
+    ```
+
+    ### The metadata library
+    ```bash
+    go get github.com/Qualflare/qualflare-go@{{ .Tag }}
+    ```
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
