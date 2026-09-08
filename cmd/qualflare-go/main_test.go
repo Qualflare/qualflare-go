@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,6 +12,12 @@ import (
 
 // run() is the whole binary minus os.Exit, so these drive the real thing:
 // flag parsing, mode selection, report writing and exit-code propagation.
+
+// run2 keeps the existing tests terse: they assert on diagnostics, so stdout is
+// discarded and errOut is the buffer they inspect.
+func run2(argv []string, stdin io.Reader, errOut io.Writer) int {
+	return run(argv, stdin, io.Discard, errOut)
+}
 
 func readReport(t *testing.T, dir string) map[string]any {
 	t.Helper()
@@ -66,14 +73,20 @@ func cleanEnv(t *testing.T) {
 	}
 }
 
-func TestVersionFlag(t *testing.T) {
+func TestVersionGoesToStdoutNotStderr(t *testing.T) {
+	// A release workflow reads this with $(qualflare-go -version). Printing it
+	// to stderr makes it invisible there -- which is exactly how the first
+	// v0.1.0 release attempt failed.
 	cleanEnv(t)
-	var out bytes.Buffer
-	if code := run([]string{"-version"}, strings.NewReader(""), &out); code != 0 {
+	var out, errOut bytes.Buffer
+	if code := run([]string{"-version"}, strings.NewReader(""), &out, &errOut); code != 0 {
 		t.Fatalf("exit = %d", code)
 	}
 	if !strings.Contains(out.String(), "qualflare-go") {
-		t.Errorf("output = %q", out.String())
+		t.Errorf("stdout = %q, want the version", out.String())
+	}
+	if errOut.Len() != 0 {
+		t.Errorf("stderr should be empty, got %q", errOut.String())
 	}
 }
 
@@ -81,7 +94,7 @@ func TestFileMode_WritesAReport(t *testing.T) {
 	cleanEnv(t)
 	dir := t.TempDir()
 	var out bytes.Buffer
-	code := run([]string{"-i", writeStream(t, passStream), "--output-dir", dir}, strings.NewReader(""), &out)
+	code := run2([]string{"-i", writeStream(t, passStream), "--output-dir", dir}, strings.NewReader(""), &out)
 	if code != 0 {
 		t.Fatalf("exit = %d: %s", code, out.String())
 	}
@@ -100,7 +113,7 @@ func TestPipeMode_WritesAReportAndWarns(t *testing.T) {
 	cleanEnv(t)
 	dir := t.TempDir()
 	var out bytes.Buffer
-	code := run([]string{"--output-dir", dir}, strings.NewReader(passStream), &out)
+	code := run2([]string{"--output-dir", dir}, strings.NewReader(passStream), &out)
 	if code != 0 {
 		t.Fatalf("exit = %d: %s", code, out.String())
 	}
@@ -121,7 +134,7 @@ func TestReportFilenameSaysGolangNotGo(t *testing.T) {
 	cleanEnv(t)
 	dir := t.TempDir()
 	var out bytes.Buffer
-	run([]string{"-i", writeStream(t, passStream), "--output-dir", dir}, strings.NewReader(""), &out)
+	run2([]string{"-i", writeStream(t, passStream), "--output-dir", dir}, strings.NewReader(""), &out)
 	name := readReport(t, dir)["__file"].(string)
 	if !strings.HasPrefix(name, "qualflare-golang-") {
 		t.Errorf("report is named %q; it must start with qualflare-golang-", name)
@@ -132,7 +145,7 @@ func TestDisabledWritesNothing(t *testing.T) {
 	cleanEnv(t)
 	dir := t.TempDir()
 	var out bytes.Buffer
-	if code := run([]string{"--enabled", "false", "-i", writeStream(t, passStream), "--output-dir", dir},
+	if code := run2([]string{"--enabled", "false", "-i", writeStream(t, passStream), "--output-dir", dir},
 		strings.NewReader(""), &out); code != 0 {
 		t.Fatalf("exit = %d", code)
 	}
@@ -152,7 +165,7 @@ func TestRepeatedInputsBecomeLaterAttempts(t *testing.T) {
 		`{"Action":"pass","Package":"m","Test":"TestA","Elapsed":0.5}`,
 		`{"Action":"fail","Package":"m","Test":"TestA","Elapsed":0.5}`, 1)
 	var out bytes.Buffer
-	code := run([]string{"-i", writeStream(t, failStream), "-i", writeStream(t, passStream), "--output-dir", dir},
+	code := run2([]string{"-i", writeStream(t, failStream), "-i", writeStream(t, passStream), "--output-dir", dir},
 		strings.NewReader(""), &out)
 	if code != 0 {
 		t.Fatalf("exit = %d: %s", code, out.String())
@@ -173,7 +186,7 @@ func TestRepeatedInputsBecomeLaterAttempts(t *testing.T) {
 func TestMissingInputFileIsAnError(t *testing.T) {
 	cleanEnv(t)
 	var out bytes.Buffer
-	if code := run([]string{"-i", "/definitely/not/here.json", "--output-dir", t.TempDir()},
+	if code := run2([]string{"-i", "/definitely/not/here.json", "--output-dir", t.TempDir()},
 		strings.NewReader(""), &out); code == 0 {
 		t.Error("expected a non-zero exit for a missing input")
 	}
@@ -182,7 +195,7 @@ func TestMissingInputFileIsAnError(t *testing.T) {
 func TestUnknownFlagExitsTwo(t *testing.T) {
 	cleanEnv(t)
 	var out bytes.Buffer
-	if code := run([]string{"--not-a-flag"}, strings.NewReader(""), &out); code != 2 {
+	if code := run2([]string{"--not-a-flag"}, strings.NewReader(""), &out); code != 2 {
 		t.Errorf("exit = %d, want 2", code)
 	}
 }
@@ -192,7 +205,7 @@ func TestAnomaliesAreReportedOnStderr(t *testing.T) {
 	dir := t.TempDir()
 	var out bytes.Buffer
 	body := "this line is not JSON\n" + passStream
-	run([]string{"-i", writeStream(t, body), "--output-dir", dir}, strings.NewReader(""), &out)
+	run2([]string{"-i", writeStream(t, body), "--output-dir", dir}, strings.NewReader(""), &out)
 	if !strings.Contains(out.String(), "not JSON") {
 		t.Errorf("the decoder had to skip a line and should have said so: %q", out.String())
 	}
@@ -240,7 +253,7 @@ func TestWrapper_PropagatesGoTestsExitCode(t *testing.T) {
 	defer os.Chdir(cwd)
 
 	var out bytes.Buffer
-	code := run([]string{"--output-dir", dir, "--", "go", "test",
+	code := run2([]string{"--output-dir", dir, "--", "go", "test",
 		"-count=1", "-run", "TestPasses", "./pkg_pass/"},
 		strings.NewReader(""), &out)
 	if code != 0 {
@@ -273,7 +286,7 @@ func TestWrapper_ABrokenBuildIsNeverReportedGreen(t *testing.T) {
 	defer os.Chdir(cwd)
 
 	var out bytes.Buffer
-	code := run([]string{"--output-dir", dir, "--", "go", "test", "-count=1", "./..."},
+	code := run2([]string{"--output-dir", dir, "--", "go", "test", "-count=1", "./..."},
 		strings.NewReader(""), &out)
 
 	if code == 0 {
