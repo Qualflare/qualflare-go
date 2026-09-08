@@ -1,9 +1,11 @@
 package qualflare
 
 import (
+	"encoding/base64"
 	"strings"
 	"testing"
 
+	"github.com/Qualflare/qualflare-go/internal/constants"
 	"github.com/Qualflare/qualflare-go/internal/sentinel"
 )
 
@@ -174,4 +176,106 @@ func TestMaskedParameter_CannotCarryAValue(t *testing.T) {
 	if strings.Contains(strings.Join(f.lines, "\n"), "secret") {
 		t.Error("nothing resembling a secret should appear on the wire")
 	}
+}
+
+// --- the public surface ------------------------------------------------------
+
+// Each exported call is checked for the message it produces. These are thin
+// wrappers, which is exactly why they are worth pinning: a wrong Kind or a
+// dropped field here is invisible until a report is already in front of a user.
+
+func TestPublicAPI_MessageShapes(t *testing.T) {
+	withGate(t, true)
+
+	for _, tc := range []struct {
+		name string
+		emit func(*fakeTB)
+		want sentinel.Message
+	}{
+		{"Label", func(f *fakeTB) { emitTo(f, labelMsg("team", "platform")) },
+			sentinel.Message{Kind: sentinel.KindLabel, Name: "team", Value: "platform"}},
+		{"Link with a type", func(f *fakeTB) { emitTo(f, linkMsg("https://x/1", LinkIssue, "QF-1")) },
+			sentinel.Message{Kind: sentinel.KindLink, URL: "https://x/1", Type: "issue", Name: "QF-1"}},
+		{"Link defaults to custom", func(f *fakeTB) { emitTo(f, linkMsg("https://x/1", "", "")) },
+			sentinel.Message{Kind: sentinel.KindLink, URL: "https://x/1", Type: "custom"}},
+		{"Description", func(f *fakeTB) { emitTo(f, descMsg("why")) },
+			sentinel.Message{Kind: sentinel.KindDescription, Text: "why"}},
+		{"Priority", func(f *fakeTB) { emitTo(f, prioMsg(PriorityHigh)) },
+			sentinel.Message{Kind: sentinel.KindPriority, Value: "high"}},
+		{"Parameter", func(f *fakeTB) { emitTo(f, paramMsg("plan", "pro")) },
+			sentinel.Message{Kind: sentinel.KindParameter, Name: "plan", Value: "pro"}},
+		{"MaskedParameter", func(f *fakeTB) { emitTo(f, maskedMsg("token")) },
+			sentinel.Message{Kind: sentinel.KindParameter, Name: "token", Masked: true}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			f := &fakeTB{}
+			tc.emit(f)
+			got := f.messages(t)
+			if len(got) != 1 {
+				t.Fatalf("expected one message, got %d", len(got))
+			}
+			if got[0].Kind != tc.want.Kind || got[0].Name != tc.want.Name ||
+				got[0].Value != tc.want.Value || got[0].URL != tc.want.URL ||
+				got[0].Type != tc.want.Type || got[0].Text != tc.want.Text ||
+				got[0].Masked != tc.want.Masked {
+				t.Errorf("got %+v, want %+v", got[0], tc.want)
+			}
+		})
+	}
+}
+
+func TestTag_ClipsAnOverlongTag(t *testing.T) {
+	withGate(t, true)
+	f := &fakeTB{}
+	emitTo(f, tagMsg(strings.Repeat("x", 400)))
+	got := f.messages(t)[0]
+	if len(got.Tags) != 1 || len(got.Tags[0]) != constants.MaxTagLength {
+		t.Errorf("tag length = %d, want the %d cap", len(got.Tags[0]), constants.MaxTagLength)
+	}
+}
+
+func TestAttach_EncodesContentAsBase64(t *testing.T) {
+	withGate(t, true)
+	f := &fakeTB{}
+	emitTo(f, attachMsg("payload", []byte("hello"), "application/json"))
+	got := f.messages(t)[0]
+	if got.Kind != sentinel.KindAttachment || got.MimeType != "application/json" {
+		t.Errorf("got %+v", got)
+	}
+	if got.Content != base64.StdEncoding.EncodeToString([]byte("hello")) {
+		t.Errorf("content = %q", got.Content)
+	}
+}
+
+func TestAttachText_DefaultsToPlainText(t *testing.T) {
+	withGate(t, true)
+	f := &fakeTB{}
+	emitTo(f, attachMsg("note", []byte("hi"), "text/plain"))
+	if got := f.messages(t)[0]; got.MimeType != "text/plain" {
+		t.Errorf("mime = %q", got.MimeType)
+	}
+}
+
+func TestTag_WithNoTagsEmitsNothing(t *testing.T) {
+	withGate(t, true)
+	f := &fakeTB{}
+	Tag(nil) // a nil TB must be inert rather than panic
+	if len(f.lines) != 0 {
+		t.Error("expected no output")
+	}
+}
+
+func TestEveryPublicCallIsInertWithANilTB(t *testing.T) {
+	// A helper that forwards a TB it never received must not take the suite
+	// down with it.
+	Label(nil, "a", "b")
+	Link(nil, "u", "", "")
+	Tag(nil, "x")
+	Description(nil, "d")
+	Priority(nil, PriorityLow)
+	Parameter(nil, "n", "v")
+	MaskedParameter(nil, "n")
+	Attach(nil, "n", []byte("x"), "")
+	AttachText(nil, "n", "x", "")
+	Step(nil, "s", func() {})
 }
