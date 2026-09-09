@@ -126,6 +126,15 @@ cask installs on Linux.
 - A prerelease tag never publishes the Homebrew cask — goreleaser's
   `skip_upload` guard checks `not .Prerelease`, so an rc cannot overwrite the
   cask `brew install` resolves.
+- **The release workflow is fully pinned** — every action to a commit SHA, and
+  goreleaser to an exact version (currently `v2.18.1`, the version that built
+  v0.1.2). This job holds `contents: write` and a Sigstore signing identity, so
+  a retagged action would run with them. Bumping is deliberate: **move to
+  goreleaser v2.19** when it ships, for the `postflight_steps` cask fix
+  (goreleaser#6873) that clears the deprecation warning Homebrew prints on every
+  command touching the tap. `qualflare-cli` is pinned the same way and needs the
+  same bump.
+
 - Do **not** add a Go Report Card badge. The service was sunset and the report
   URL now serves a thank-you page. The URL still belongs in the awesome-go PR
   body, because their checker only requires it to resolve.
