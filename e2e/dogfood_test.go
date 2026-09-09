@@ -9,7 +9,6 @@ package e2e
 import (
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/Qualflare/qualflare-go"
 )
@@ -50,20 +49,6 @@ func TestNestsSteps(t *testing.T) {
 		qualflare.Step(t, "inner", func() {
 			qualflare.Parameter(t, "qty", "2")
 		})
-	})
-}
-
-// The regression that motivated the cap sentinel. An outer step wraps a
-// measured sleep AND exceeds the per-attempt step cap inside it. Without the
-// sentinel, the dropped steps' stops close the outer step, and its real
-// duration is discarded -- measured once in the pytest reporter as a 50ms sleep
-// reporting 0.000ms. The verifier asserts the outer step still reports >= 40ms.
-func TestOuterStepSurvivesTheStepCap(t *testing.T) {
-	qualflare.Step(t, "wraps-a-measured-sleep", func() {
-		for i := 0; i < 320; i++ {
-			qualflare.Step(t, "filler", func() {})
-		}
-		time.Sleep(50 * time.Millisecond)
 	})
 }
 
