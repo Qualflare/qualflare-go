@@ -153,8 +153,8 @@ network calls, so it has no credential; `qf login` holds it.
 ## Test reports
 
 This reporter is tested with itself. `e2e/` is a Go suite covering this
-package's own behaviour — the metadata API, nested steps, subtests as cases,
-attachments and the step-cap regression — run by this reporter and uploaded to
+package's own behaviour — the metadata API, nested steps, subtests as cases and
+attachments — run by this reporter and uploaded to
 Qualflare on every merge to `main` by the **published** `qualflare-cli`. The
 results below are that suite's, reported through the code this README documents:
 
@@ -162,8 +162,10 @@ results below are that suite's, reported through the code this README documents:
 
 Every case there is meant to pass, so a red run is a real regression rather than
 a fixture failing on purpose. The deliberately awkward cases — panics, timeouts,
-`os.Exit`, a package that does not compile — live in
-`test/integration/fixtures/`, which is never uploaded.
+`os.Exit`, a package that does not compile, a test that blows past the step cap —
+live in `test/integration/fixtures/`, which is never uploaded. That last one is
+deliberate: exercising a 300-step cap takes 300+ steps, and a report people read
+should not be three hundred steps named `filler`.
 
 ## Known limitations
 

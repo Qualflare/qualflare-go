@@ -302,3 +302,63 @@ func TestWrapper_ABrokenBuildIsNeverReportedGreen(t *testing.T) {
 		t.Fatal("go test failed but every case in the report is green -- the backstop did not fire")
 	}
 }
+
+func TestWrapper_OuterStepSurvivesTheStepCap(t *testing.T) {
+	// THE cap-sentinel regression, end to end: a real `go test` run, the real
+	// sentinel encode/decode, the real replay. Without the sentinel the dropped
+	// steps' stops close the outer step and its measured duration is discarded.
+	//
+	// This used to live in the dogfood suite, but exercising a 300-step cap
+	// needs 300+ steps, and that suite is uploaded to a public project -- so the
+	// report people read filled up with steps named "filler". The fixture module
+	// is never uploaded, and the assertion is the same one.
+	if testing.Short() {
+		t.Skip("execs a real go test")
+	}
+	cleanEnv(t)
+	dir, err := filepath.Abs(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	cwd, _ := os.Getwd()
+	if err := os.Chdir("../../test/integration/fixtures/awkward"); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(cwd)
+
+	var out bytes.Buffer
+	code := run2([]string{"--output-dir", dir, "--", "go", "test",
+		"-count=1", "-run", "TestOuterStepSurvivesTheStepCap", "./pkg_stepcap/"},
+		strings.NewReader(""), &out)
+	if code != 0 {
+		t.Fatalf("a passing run should exit 0, got %d: %s", code, out.String())
+	}
+
+	var found bool
+	for _, c := range cases(readReport(t, dir)) {
+		if c["name"] != "TestOuterStepSurvivesTheStepCap" {
+			continue
+		}
+		found = true
+		steps, _ := c["steps"].([]any)
+		if len(steps) == 0 {
+			t.Fatal("no steps recorded for the cap case")
+		}
+		if len(steps) > 300 {
+			t.Errorf("step cap not applied: %d steps", len(steps))
+		}
+		outer, _ := steps[0].(map[string]any)
+		if name, _ := outer["name"].(string); name != "wraps-a-measured-sleep" {
+			t.Errorf("first step = %q, want the outer step that wraps the sleep", name)
+		}
+		// Nanoseconds on the wire. 40ms rather than 50ms: the assertion is that
+		// the duration survived at all, not that the sleep was precise.
+		dur, _ := outer["duration"].(float64)
+		if dur < 40_000_000 {
+			t.Errorf("outer step duration = %.3fms, want the measured sleep to survive", dur/1e6)
+		}
+	}
+	if !found {
+		t.Fatal("the cap case is missing from the report")
+	}
+}

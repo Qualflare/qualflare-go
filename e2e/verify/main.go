@@ -160,19 +160,10 @@ func main() {
 		check("two steps recorded", false, fmt.Sprint(len(steps.Steps)))
 	}
 
-	// THE cap-sentinel regression. Without the sentinel the dropped steps'
-	// stops close the outer step and its real duration is lost.
-	capCase, ok := byName["TestOuterStepSurvivesTheStepCap"]
-	check("step-cap case present", ok, "missing")
-	if ok && len(capCase.Steps) > 0 {
-		outer := capCase.Steps[0]
-		check("the outer step is the one that wraps the sleep", outer.Name == "wraps-a-measured-sleep", outer.Name)
-		check("the outer step kept its measured duration", outer.Duration >= 40_000_000,
-			fmt.Sprintf("%.3fms", float64(outer.Duration)/1e6))
-		check("the step cap was applied", len(capCase.Steps) <= 300, fmt.Sprint(len(capCase.Steps)))
-	} else if ok {
-		check("steps recorded for the cap case", false, "none")
-	}
+	// The cap-sentinel regression is asserted end to end in
+	// cmd/qualflare-go/main_test.go against test/integration/fixtures/awkward,
+	// not here: exercising a 300-step cap needs 300+ steps, and this report is
+	// uploaded to a public project.
 
 	att, ok := byName["TestAttachesContent"]
 	check("attachment case present", ok, "missing")
