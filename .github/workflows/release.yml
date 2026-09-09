@@ -24,11 +24,14 @@ jobs:
       contents: write
       id-token: write # keyless cosign signing via Sigstore OIDC
     steps:
-      - uses: actions/checkout@v5
+      # Every action is pinned to a commit SHA, not a mutable major tag: this job
+      # holds `contents: write` and a Sigstore signing identity, so a retagged
+      # action would run with them. Matches qualflare-cli's release workflow.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # goreleaser needs the full history for its changelog
 
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
           cache: true
@@ -63,13 +66,16 @@ jobs:
             *) echo "::error::built binary reports '$reported', which does not contain the tag '$tag'"; exit 1 ;;
           esac
 
-      - uses: sigstore/cosign-installer@v3
-      - uses: anchore/sbom-action/download-syft@v0
+      - uses: sigstore/cosign-installer@7e8b541eb2e61bf99390e1afd4be13a184e9ebc5 # v3.10.1
+      - uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
 
       - name: goreleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
-          version: latest
+          # Pinned, not `latest`: a goreleaser release must not change what this
+          # workflow does without someone choosing it. Bump deliberately -- v2.19
+          # is the one to move to, for the postflight_steps cask fix (#6873).
+          version: v2.18.1
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
