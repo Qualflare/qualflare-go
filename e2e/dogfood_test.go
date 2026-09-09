@@ -43,10 +43,14 @@ func TestMaskedParameterInsideAStep(t *testing.T) {
 	})
 }
 
+// Nesting, with names worth reading. This suite is uploaded to a PUBLIC
+// project, so "outer"/"inner" advertised placeholder data on a report people
+// look at -- the same mistake as the 320 steps named "filler". The parameters
+// were already a cart scenario; the step names now match.
 func TestNestsSteps(t *testing.T) {
-	qualflare.Step(t, "outer", func() {
+	qualflare.Step(t, "add to cart", func() {
 		qualflare.Parameter(t, "sku", "widget")
-		qualflare.Step(t, "inner", func() {
+		qualflare.Step(t, "set quantity", func() {
 			qualflare.Parameter(t, "qty", "2")
 		})
 	})
