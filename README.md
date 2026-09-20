@@ -214,6 +214,7 @@ format so one `qf collect` handles a polyglot repository:
 [playwright](https://github.com/Qualflare/qualflare-playwright) ·
 [cucumberjs](https://github.com/Qualflare/qualflare-cucumberjs) ·
 [pytest](https://github.com/Qualflare/qualflare-pytest) ·
+[maestro](https://github.com/Qualflare/qualflare-maestro) ·
 [cli](https://github.com/Qualflare/qualflare-cli)
 
 ## License
